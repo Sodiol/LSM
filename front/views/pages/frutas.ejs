@@ -1,0 +1,221 @@
+<%- include('../partials/navbar') %> 
+ 
+<div style="text-align:center; margin-top:20px;"> 
+  <div class="main-container">
+    <!-- Imagen flotante a la izquierda -->
+    <img src="/images/Alimentacion/Frutas_Sign.jpg" class="float-left-img" alt="Frutas">
+    
+    <!-- Imagen principal en el centro -->
+    <div class="image-container" style="display:inline-block; position:relative;"> 
+      <img  
+        id="imagenFrutas" 
+        src="/images/Alimentacion/Frutas.png"  
+        alt="Frutas"  
+        style="width:900px;border:1px solid #ccc;border-radius:12px" 
+      > 
+   
+      <!-- 🔳 Recuadros generados automáticamente --> 
+      <div id="overlays"></div> 
+    </div>
+    
+    <!-- Título flotante a la derecha -->
+    <h1 class="float-right-title">Frutas</h1>
+  </div>
+ 
+  <pre id="resultado" style="text-align:left; background:#f0f0f0; padding:10px; max-width:600px; margin:20px auto;"></pre> 
+</div> 
+ 
+<!-- 🔽 MENÚ DE SUBTEMAS ABAJO --> 
+<div class="subtema-menu"> 
+  <a href="/temas/verduras">
+    <img src="/images/senas/verduras.png" alt="Seña Verduras">
+    <span>Verduras</span>
+  </a>
+  <a href="/temas/bebidas">
+    <img src="/images/senas/bebidas.png" alt="Seña Bebidas">
+    <span>Bebidas</span>
+  </a>
+  <a href="/temas/postres">
+    <img src="/images/senas/postres.png" alt="Seña Postres">
+    <span>Postres</span>
+  </a>
+  <a href="/temas/comidas">
+    <img src="/images/senas/comidas.png" alt="Seña Comidas">
+    <span>Comidas</span>
+  </a>
+</div>
+ 
+<style> 
+.main-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin: 0 auto 20px auto;
+  max-width: 1300px;
+}
+
+.float-left-img {
+  width: 120px;
+  height: auto;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.float-right-title {
+  margin: 0;
+  flex-shrink: 0;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 2.5em;
+}
+
+.bounding-box { 
+  position: absolute; 
+  border: 2px solid rgba(255, 255, 255, 0);
+  border-radius: 4px; 
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0);
+  transition: all 0.3s ease;
+  cursor: pointer;
+} 
+
+.bounding-box:hover {
+  border-color: #0077cc;
+  background: rgba(0, 119, 204, 0.15);
+  box-shadow: 0 0 15px rgba(0, 119, 204, 0.5);
+}
+ 
+.bounding-box:hover .tooltip-image,
+.bounding-box:hover .tooltip-text { 
+  display: block; 
+} 
+ 
+/* Tooltip para la IMAGEN (izquierda) */
+.tooltip-image { 
+  display: none; 
+  position: absolute; 
+  top: 50%;
+  right: calc(100% + 10px);
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.85); 
+  padding: 8px; 
+  border-radius: 6px; 
+  z-index: 10;
+  pointer-events: none;
+} 
+
+.tooltip-image img { 
+  display: block;
+  width: 80px; 
+  height: auto; 
+  border-radius: 4px;
+} 
+
+/* Tooltip para el TEXTO (derecha) */
+.tooltip-text { 
+  display: none; 
+  position: absolute; 
+  top: 50%;
+  left: calc(100% + 10px);
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.85); 
+  color: white; 
+  padding: 8px 12px; 
+  border-radius: 6px; 
+  font-size: 13px; 
+  white-space: nowrap; 
+  z-index: 10;
+  pointer-events: none;
+}
+ 
+/* 🔽 ESTILO DEL MENÚ DE SUBTEMAS */ 
+.subtema-menu { 
+  margin-top: 30px; 
+  padding: 15px; 
+  text-align: center; 
+  background: #f8f8f8; 
+  border-top: 2px solid #ccc; 
+} 
+
+.subtema-menu a { 
+  display: inline-block;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  margin: 0 20px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.subtema-menu img { 
+  width: 90px; 
+  height: 90px; 
+  object-fit: contain;
+  border-radius: 12px;
+  border: 2px solid transparent;
+}
+
+.subtema-menu span {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.subtema-menu a:hover img {
+  transform: scale(1.1);
+  filter: brightness(1.1);
+  border-color: #0077cc;
+}
+</style> 
+ 
+<script> 
+// 🔹 Datos del CSV escalados proporcionalmente
+// Imagen original: 1536x1024, escalada a 900px de ancho
+// Factor de escala: 900/1536 = 0.5859375
+const objetos = [ 
+  { nombre: "Sandía", x: 126, y: 31, w: 327, h: 309 }, 
+  { nombre: "Pera", x: 456, y: 102, w: 137, h: 176 }, 
+  { nombre: "Piña", x: 606, y: 19, w: 180, h: 313 }, 
+  { nombre: "Melón", x: 508, y: 218, w: 181, h: 178 }, 
+  { nombre: "Naranja", x: 704, y: 263, w: 134, h: 128 }, 
+  { nombre: "Plátano", x: 336, y: 356, w: 212, h: 155 }, 
+  { nombre: "Pera", x: 70, y: 274, w: 114, h: 115 }, 
+  { nombre: "Papaya", x: 171, y: 320, w: 258, h: 148 }, 
+  { nombre: "Lima", x: 649, y: 353, w: 113, h: 90 }, 
+  { nombre: "Manzana", x: 391, y: 279, w: 113, h: 113 }, 
+  { nombre: "Durazno", x: 642, y: 460, w: 98, h: 96 }, 
+  { nombre: "Pera", x: 534, y: 410, w: 94, h: 145 }, 
+  { nombre: "Higo", x: 746, y: 407, w: 96, h: 108 }, 
+  { nombre: "Cereza", x: 380, y: 507, w: 59, h: 68 }, 
+  { nombre: "Uva", x: 243, y: 463, w: 111, h: 107 }, 
+  { nombre: "Mango", x: 64, y: 401, w: 181, h: 141 }, 
+  { nombre: "Fresa", x: 449, y: 489, w: 69, h: 83 } 
+];
+
+console.log("Total de frutas:", objetos.length);
+ 
+const overlay = document.getElementById("overlays"); 
+ 
+objetos.forEach((obj, i) => { 
+  const div = document.createElement("div"); 
+  div.className = "bounding-box"; 
+  div.style.left = obj.x + "px"; 
+  div.style.top = obj.y + "px"; 
+  div.style.width = obj.w + "px"; 
+  div.style.height = obj.h + "px"; 
+ 
+  // Tooltip de IMAGEN (izquierda)
+  const tooltipImage = document.createElement("div"); 
+  tooltipImage.className = "tooltip-image"; 
+  tooltipImage.innerHTML = `<img src="/images/Alimentacion/${obj.nombre}.jpg" alt="Seña de ${obj.nombre}">`; 
+  
+  // Tooltip de TEXTO (derecha)
+  const tooltipText = document.createElement("div"); 
+  tooltipText.className = "tooltip-text"; 
+  tooltipText.textContent = obj.nombre;
+  
+  div.appendChild(tooltipImage); 
+  div.appendChild(tooltipText); 
+  overlay.appendChild(div); 
+}); 
+</script>

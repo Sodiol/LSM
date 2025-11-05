@@ -1,0 +1,162 @@
+<%- include('../partials/navbar') %> 
+ 
+<div style="text-align:center; margin-top:20px;"> 
+  <div> 
+      <h1>Salón</h1> 
+      <img src="/images/Escuela/Salon.jpg" style="width:100px; height:auto; border-radius:8px; margin-top:10px;"> 
+  </div> 
+ 
+  <div class="image-container" style="display:inline-block; position:relative;"> 
+    <img  
+      id="imagenEscuela" 
+      src="https://i.pinimg.com/736x/bb/11/ab/bb11abc76809ac2b7426d682bb6b0634.jpg"  
+      alt="Escuela"  
+      style="width:900px;border:1px solid #ccc;border-radius:12px" 
+    > 
+ 
+    <!-- 🔳 Recuadros generados automáticamente --> 
+    <div id="overlays"></div> 
+  </div> 
+ 
+  <pre id="resultado" style="text-align:left; background:#f0f0f0; padding:10px; max-width:600px; margin:20px auto;"></pre> 
+</div> 
+ 
+<!-- 🔽 MENÚ DE SUBTEMAS ABAJO --> 
+<div class="subtema-menu"> 
+  <a href="/utilesEscolares">
+    <img src="/images/Escuela/Mochila.jpg" alt="Seña Mochila">
+    <span></span>
+  </a>
+  <a href="/temas/patio">
+    <img src="/images/senas/recreo.png" alt="Seña Recreo">
+    <span>Recreo</span>
+  </a>
+  <a href="/temas/biblioteca">
+    <img src="/images/senas/clases.png" alt="Seña Clases">
+    <span>Clases</span>
+  </a>
+  <a href="/temas/cafeteria">
+    <img src="/images/senas/reglas.png" alt="Seña Reglas">
+    <span>Reglas</span>
+  </a>
+</div>
+ 
+<style> 
+.bounding-box { 
+  position: absolute; 
+  border: 2px solid transparent;
+  border-radius: 4px; 
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0);
+  transition: all 0.3s ease;
+  cursor: pointer;
+} 
+
+.bounding-box:hover {
+  border-color: #0077cc;
+  background: rgba(0, 119, 204, 0.15);
+  box-shadow: 0 0 15px rgba(0, 119, 204, 0.5);
+}
+ 
+.bounding-box:hover .tooltip { 
+  display: block; 
+} 
+ 
+.tooltip { 
+  display: none; 
+  position: absolute; 
+  top: -120px; 
+  left: 0; 
+  background: rgba(0,0,0,0.8); 
+  color: white; 
+  padding: 5px; 
+  border-radius: 6px; 
+  font-size: 12px; 
+  text-align: center; 
+  white-space: nowrap; 
+  z-index: 10; 
+} 
+ 
+.tooltip img { 
+  display: block; 
+  width: 80px; 
+  height: auto; 
+  margin: 5px auto 0; 
+  border-radius: 4px; 
+} 
+ 
+/* 🔽 ESTILO DEL MENÚ DE SUBTEMAS */ 
+.subtema-menu { 
+  margin-top: 30px; 
+  padding: 15px; 
+  text-align: center; 
+  background: #f8f8f8; 
+  border-top: 2px solid #ccc; 
+} 
+.subtema-menu a { 
+  display: inline-block;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  margin: 0 20px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.subtema-menu img { 
+  width: 90px; 
+  height: 90px; 
+  object-fit: contain;
+  border-radius: 12px;
+  border: 2px solid transparent;
+}
+.subtema-menu span {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+}
+.subtema-menu a:hover img {
+  transform: scale(1.1);
+  filter: brightness(1.1);
+  border-color: #0077cc;
+}
+</style> 
+ 
+<script> 
+// 🔹 Datos del CSV (escalados a 900px de ancho) 
+const objetos = [ 
+  { nombre: "Pizarrón", x: 312, y: 138, w: 275, h: 178 }, 
+  { nombre: "Escritorio", x: 94, y: 334, w: 241, h: 148 }, 
+  { nombre: "Estante", x: 618, y: 188, w: 182, h: 266 }, 
+  { nombre: "Puerta", x: 818, y: 119, w: 81, h: 364 }, 
+  { nombre: "Reloj", x: 831, y: 52, w: 52, h: 55 }, 
+  { nombre: "Ventana", x: 1, y: 90, w: 81, h: 265 }, 
+  { nombre: "Mesa", x: 3, y: 513, w: 256, h: 83 }, 
+  { nombre: "Mesa", x: 344, y: 515, w: 220, h: 85 }, 
+  { nombre: "Mesa", x: 639, y: 512, w: 258, h: 85 }, 
+  { nombre: "Silla", x: 243, y: 285, w: 80, h: 43 }, 
+  { nombre: "Borrador", x: 364, y: 307, w: 73, h: 9 }, 
+  { nombre: "Libros", x: 698, y: 199, w: 98, h: 55 }, 
+  { nombre: "Libros", x: 725, y: 263, w: 67, h: 56 }, 
+  { nombre: "Libros", x: 654, y: 334, w: 134, h: 51 }, 
+  { nombre: "Libros", x: 657, y: 417, w: 133, h: 32 } 
+]; 
+ 
+const overlay = document.getElementById("overlays"); 
+ 
+objetos.forEach((obj, i) => { 
+  const div = document.createElement("div"); 
+  div.className = "bounding-box"; 
+  div.style.left = obj.x + "px"; 
+  div.style.top = obj.y + "px"; 
+  div.style.width = obj.w + "px"; 
+  div.style.height = obj.h + "px"; 
+ 
+  const tooltip = document.createElement("div"); 
+  tooltip.className = "tooltip"; 
+  tooltip.innerHTML = ` 
+    <strong>${obj.nombre}</strong><br> 
+    <img src="/images/Escuela/${obj.nombre.replace(/\s+/g,'_')}.jpg" alt="Seña de ${obj.nombre}"> 
+  `; 
+  div.appendChild(tooltip); 
+  overlay.appendChild(div); 
+}); 
+</script>

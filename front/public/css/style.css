@@ -1,0 +1,412 @@
+/*body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    background: #333;
+    padding: 10px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+*/
+.bounding-box {
+  position: absolute;
+  border: 2px solid red;
+  pointer-events: auto;
+}
+
+.bounding-box .tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: -110%; /* arriba de la caja */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 6px;
+  border-radius: 6px;
+  text-align: center;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.bounding-box .tooltip img {
+  max-width: 100px;
+  max-height: 100px;
+  display: block;
+  margin: 4px auto 0;
+  border-radius: 4px;
+}
+
+.bounding-box:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* ========================================
+   STYLESHEET GLOBAL - PÁGINAS INTERACTIVAS
+   ======================================== */
+
+/* === RESET Y BASE === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f7fa;
+  padding: 0;
+  margin: 0;
+}
+
+/* === CONTENEDOR PRINCIPAL === */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px 10px;
+}
+
+/* === LAYOUT DE IMAGEN PRINCIPAL === */
+.main-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.float-left-img {
+  width: 120px;
+  height: auto;
+  border-radius: 8px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.float-right-title {
+  margin: 0;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  color: #0077cc;
+  flex-shrink: 0;
+  font-weight: bold;
+}
+
+/* === CONTENEDOR DE IMAGEN INTERACTIVA === */
+.image-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+#overlays {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* === BOUNDING BOXES (ÁREAS INTERACTIVAS) === */
+.bounding-box {
+  position: absolute;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.bounding-box:hover {
+  border-color: #0077cc;
+  background: rgba(0, 119, 204, 0.15);
+  box-shadow: 0 0 15px rgba(0, 119, 204, 0.5);
+}
+
+.bounding-box:active {
+  background: rgba(0, 119, 204, 0.25);
+}
+
+/* === TOOLTIPS === */
+.bounding-box:hover .tooltip-image,
+.bounding-box:hover .tooltip-text {
+  display: block;
+}
+
+/* Tooltip de imagen (izquierda) */
+.tooltip-image {
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 10px);
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.85);
+  padding: 8px;
+  border-radius: 6px;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.tooltip-image img {
+  display: block;
+  width: 80px;
+  height: auto;
+  border-radius: 4px;
+}
+
+/* Tooltip de texto (derecha) */
+.tooltip-text {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 10px);
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.85);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* === MENÚ DE SUBTEMAS === */
+.subtema-menu {
+  margin-top: 30px;
+  padding: 15px;
+  text-align: center;
+  background: #f8f8f8;
+  border-top: 2px solid #ccc;
+  border-radius: 8px;
+}
+
+.subtema-menu a {
+  display: inline-block;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  margin: 10px 15px;
+  transition: transform 0.3s ease;
+}
+
+.subtema-menu img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.subtema-menu span {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.subtema-menu a:hover {
+  transform: scale(1.1);
+}
+
+.subtema-menu a:hover img {
+  border-color: #0077cc;
+  filter: brightness(1.1);
+  box-shadow: 0 4px 12px rgba(0, 119, 204, 0.3);
+}
+
+/* === UTILIDADES === */
+.text-center {
+  text-align: center;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+/* === TABLETS (768px - 1024px) === */
+@media (max-width: 1024px) {
+  .page-container {
+    padding: 15px 8px;
+  }
+
+  .main-container {
+    gap: 15px;
+  }
+
+  .float-left-img {
+    width: 100px;
+  }
+
+  .tooltip-image img {
+    width: 60px;
+  }
+
+  .tooltip-text {
+    font-size: 12px;
+  }
+
+  .subtema-menu img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .subtema-menu span {
+    font-size: 13px;
+  }
+}
+
+/* === MÓVILES (menos de 768px) === */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 10px 5px;
+  }
+
+  .main-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .float-left-img {
+    width: 80px;
+  }
+
+  .float-right-title {
+    text-align: center;
+  }
+
+  .image-container {
+    max-width: 100%;
+  }
+
+  /* Tooltips en móviles aparecen arriba */
+  .tooltip-image,
+  .tooltip-text {
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%);
+  }
+
+  .tooltip-image img {
+    width: 50px;
+  }
+
+  .tooltip-text {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+
+  .subtema-menu {
+    padding: 10px;
+  }
+
+  .subtema-menu a {
+    margin: 8px 10px;
+  }
+
+  .subtema-menu img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .subtema-menu span {
+    font-size: 12px;
+  }
+}
+
+/* === MÓVILES PEQUEÑOS (menos de 480px) === */
+@media (max-width: 480px) {
+  .page-container {
+    padding: 8px 3px;
+  }
+
+  .main-container {
+    gap: 10px;
+  }
+
+  .float-left-img {
+    width: 60px;
+  }
+
+  .float-right-title {
+    font-size: 1.3rem;
+  }
+
+  .tooltip-image img {
+    width: 40px;
+  }
+
+  .tooltip-text {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+
+  .subtema-menu {
+    padding: 8px;
+  }
+
+  .subtema-menu a {
+    margin: 5px 8px;
+  }
+
+  .subtema-menu img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .subtema-menu span {
+    font-size: 11px;
+    margin-top: 5px;
+  }
+}
+
+/* === PANTALLAS MUY PEQUEÑAS (menos de 360px) === */
+@media (max-width: 360px) {
+  .float-left-img {
+    width: 50px;
+  }
+
+  .subtema-menu img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .subtema-menu span {
+    font-size: 10px;
+  }
+}
