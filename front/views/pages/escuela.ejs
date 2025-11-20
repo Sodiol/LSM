@@ -1,21 +1,25 @@
 <%- include('../partials/navbar') %> 
  
 <div style="text-align:center; margin-top:20px;"> 
-  <div> 
-      <h1>Salón</h1> 
-      <img src="/images/Escuela/Salon.jpg" style="width:100px; height:auto; border-radius:8px; margin-top:10px;"> 
-  </div> 
- 
-  <div class="image-container" style="display:inline-block; position:relative;"> 
-    <img  
-      id="imagenEscuela" 
-      src="https://i.pinimg.com/736x/bb/11/ab/bb11abc76809ac2b7426d682bb6b0634.jpg"  
-      alt="Escuela"  
-      style="width:900px;border:1px solid #ccc;border-radius:12px" 
-    > 
- 
-    <!-- 🔳 Recuadros generados automáticamente --> 
-    <div id="overlays"></div> 
+  <div class="main-container">
+    <!-- Imagen flotante a la izquierda -->
+    <img src="/images/Escuela/Salon.jpg" class="float-left-img" alt="Salon">
+    
+    <!-- Imagen principal en el centro -->
+    <div class="image-container" style="display:inline-block; position:relative;"> 
+      <img  
+        id="imagenEscuela" 
+        src="https://i.pinimg.com/736x/bb/11/ab/bb11abc76809ac2b7426d682bb6b0634.jpg"  
+        alt="Escuela"  
+        class="main-image"
+      > 
+   
+      <!-- 🔳 Recuadros generados automáticamente --> 
+      <div id="overlays"></div> 
+    </div>
+    
+    <!-- Título flotante a la derecha -->
+    <h1 class="float-right-title">Salón</h1>
   </div> 
  
   <pre id="resultado" style="text-align:left; background:#f0f0f0; padding:10px; max-width:600px; margin:20px auto;"></pre> 
@@ -25,7 +29,7 @@
 <div class="subtema-menu"> 
   <a href="/utilesEscolares">
     <img src="/images/Escuela/Mochila.jpg" alt="Seña Mochila">
-    <span></span>
+    <span>Útiles</span>
   </a>
   <a href="/temas/patio">
     <img src="/images/senas/recreo.png" alt="Seña Recreo">
@@ -42,6 +46,48 @@
 </div>
  
 <style> 
+/* Reset y contenedor principal */
+* {
+  box-sizing: border-box;
+}
+
+.main-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin: 0 auto 20px auto;
+  max-width: 1300px;
+  padding: 0 20px;
+}
+
+.float-left-img {
+  width: 120px;
+  height: auto;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.image-container {
+  position: relative;
+  max-width: 100%;
+}
+
+.main-image {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  display: block;
+}
+
+.float-right-title {
+  margin: 0;
+  flex-shrink: 0;
+  font-size: 2.5em;
+}
+
 .bounding-box { 
   position: absolute; 
   border: 2px solid transparent;
@@ -58,32 +104,48 @@
   box-shadow: 0 0 15px rgba(0, 119, 204, 0.5);
 }
  
-.bounding-box:hover .tooltip { 
+.bounding-box:hover .tooltip-image,
+.bounding-box:hover .tooltip-text { 
   display: block; 
 } 
  
-.tooltip { 
+/* Tooltip para la IMAGEN (izquierda) */
+.tooltip-image { 
   display: none; 
   position: absolute; 
-  top: -120px; 
-  left: 0; 
-  background: rgba(0,0,0,0.8); 
-  color: white; 
-  padding: 5px; 
+  top: 50%;
+  right: calc(100% + 10px);
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.85); 
+  padding: 8px; 
   border-radius: 6px; 
-  font-size: 12px; 
-  text-align: center; 
-  white-space: nowrap; 
-  z-index: 10; 
+  z-index: 10;
+  pointer-events: none;
 } 
- 
-.tooltip img { 
-  display: block; 
+
+.tooltip-image img { 
+  display: block;
   width: 80px; 
   height: auto; 
-  margin: 5px auto 0; 
-  border-radius: 4px; 
+  border-radius: 4px;
 } 
+
+/* Tooltip para el TEXTO (derecha) */
+.tooltip-text { 
+  display: none; 
+  position: absolute; 
+  top: 50%;
+  left: calc(100% + 10px);
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.85); 
+  color: white; 
+  padding: 8px 12px; 
+  border-radius: 6px; 
+  font-size: 13px; 
+  white-space: nowrap; 
+  z-index: 10;
+  pointer-events: none;
+}
  
 /* 🔽 ESTILO DEL MENÚ DE SUBTEMAS */ 
 .subtema-menu { 
@@ -91,16 +153,21 @@
   padding: 15px; 
   text-align: center; 
   background: #f8f8f8; 
-  border-top: 2px solid #ccc; 
+  border-top: 2px solid #ccc;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
 } 
+
 .subtema-menu a { 
   display: inline-block;
   text-decoration: none;
   color: #333;
   font-weight: bold;
-  margin: 0 20px;
   transition: transform 0.3s ease, filter 0.3s ease;
 }
+
 .subtema-menu img { 
   width: 90px; 
   height: 90px; 
@@ -108,21 +175,142 @@
   border-radius: 12px;
   border: 2px solid transparent;
 }
+
 .subtema-menu span {
   display: block;
   margin-top: 8px;
   font-size: 14px;
 }
+
 .subtema-menu a:hover img {
   transform: scale(1.1);
   filter: brightness(1.1);
   border-color: #0077cc;
 }
+
+/* 📱 RESPONSIVE TABLETS (max 992px) */
+@media (max-width: 992px) {
+  .main-container {
+    gap: 20px;
+    padding: 0 15px;
+  }
+  
+  .float-left-img {
+    width: 80px;
+  }
+  
+  .float-right-title {
+    font-size: 2em;
+  }
+  
+  .tooltip-image img {
+    width: 60px;
+  }
+  
+  .subtema-menu img {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+/* 📱 RESPONSIVE MÓVILES (max 768px) */
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .float-left-img {
+    width: 100px;
+    order: -1;
+  }
+  
+  .float-right-title {
+    font-size: 2em;
+    order: 1;
+  }
+  
+  .image-container {
+    order: 0;
+  }
+  
+  /* Tooltips en móviles - mostrar arriba/abajo */
+  .tooltip-image {
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%);
+  }
+  
+  .tooltip-text {
+    left: 50%;
+    top: calc(100% + 10px);
+    transform: translateX(-50%);
+  }
+  
+  .subtema-menu {
+    gap: 15px;
+    padding: 15px 10px;
+  }
+  
+  .subtema-menu img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .subtema-menu span {
+    font-size: 12px;
+  }
+}
+
+/* 📱 RESPONSIVE MÓVILES PEQUEÑOS (max 480px) */
+@media (max-width: 480px) {
+  .main-container {
+    padding: 0 10px;
+  }
+  
+  .float-left-img {
+    width: 80px;
+  }
+  
+  .float-right-title {
+    font-size: 1.5em;
+  }
+  
+  .tooltip-image img {
+    width: 50px;
+  }
+  
+  .tooltip-text {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+  
+  .subtema-menu {
+    gap: 10px;
+  }
+  
+  .subtema-menu img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .subtema-menu span {
+    font-size: 11px;
+  }
+  
+  /* Ajustar hover en móviles */
+  .bounding-box:active {
+    border-color: #0077cc;
+    background: rgba(0, 119, 204, 0.15);
+  }
+}
 </style> 
  
 <script> 
-// 🔹 Datos del CSV (escalados a 900px de ancho) 
-const objetos = [ 
+// 🔹 Datos del CSV originales (base 900px de ancho) 
+const objetosBase = [ 
   { nombre: "Pizarrón", x: 312, y: 138, w: 275, h: 178 }, 
   { nombre: "Escritorio", x: 94, y: 334, w: 241, h: 148 }, 
   { nombre: "Estante", x: 618, y: 188, w: 182, h: 266 }, 
@@ -139,24 +327,57 @@ const objetos = [
   { nombre: "Libros", x: 654, y: 334, w: 134, h: 51 }, 
   { nombre: "Libros", x: 657, y: 417, w: 133, h: 32 } 
 ]; 
- 
-const overlay = document.getElementById("overlays"); 
- 
-objetos.forEach((obj, i) => { 
-  const div = document.createElement("div"); 
-  div.className = "bounding-box"; 
-  div.style.left = obj.x + "px"; 
-  div.style.top = obj.y + "px"; 
-  div.style.width = obj.w + "px"; 
-  div.style.height = obj.h + "px"; 
- 
-  const tooltip = document.createElement("div"); 
-  tooltip.className = "tooltip"; 
-  tooltip.innerHTML = ` 
-    <strong>${obj.nombre}</strong><br> 
-    <img src="/images/Escuela/${obj.nombre.replace(/\s+/g,'_')}.jpg" alt="Seña de ${obj.nombre}"> 
-  `; 
-  div.appendChild(tooltip); 
-  overlay.appendChild(div); 
-}); 
+
+const imagen = document.getElementById("imagenEscuela");
+const overlay = document.getElementById("overlays");
+const anchoBase = 900; // Ancho original de referencia
+
+function crearBoundingBoxes() {
+  // Limpiar overlays existentes
+  overlay.innerHTML = '';
+  
+  // Obtener el ancho actual de la imagen
+  const anchoActual = imagen.offsetWidth;
+  const escala = anchoActual / anchoBase;
+  
+  objetosBase.forEach((obj, i) => { 
+    const div = document.createElement("div"); 
+    div.className = "bounding-box"; 
+    
+    // Escalar las coordenadas
+    div.style.left = (obj.x * escala) + "px"; 
+    div.style.top = (obj.y * escala) + "px"; 
+    div.style.width = (obj.w * escala) + "px"; 
+    div.style.height = (obj.h * escala) + "px"; 
+   
+    // Tooltip de IMAGEN (izquierda)
+    const tooltipImage = document.createElement("div"); 
+    tooltipImage.className = "tooltip-image"; 
+    tooltipImage.innerHTML = `<img src="/images/Escuela/${obj.nombre.replace(/\s+/g,'_')}.jpg" alt="Seña de ${obj.nombre}">`; 
+    
+    // Tooltip de TEXTO (derecha)
+    const tooltipText = document.createElement("div"); 
+    tooltipText.className = "tooltip-text"; 
+    tooltipText.textContent = obj.nombre;
+    
+    div.appendChild(tooltipImage); 
+    div.appendChild(tooltipText); 
+    overlay.appendChild(div); 
+  }); 
+}
+
+// Crear los bounding boxes cuando la imagen cargue
+imagen.addEventListener('load', crearBoundingBoxes);
+
+// Recrear los bounding boxes cuando cambie el tamaño de la ventana
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(crearBoundingBoxes, 250);
+});
+
+// Ejecutar inicialmente si la imagen ya está cargada
+if (imagen.complete) {
+  crearBoundingBoxes();
+}
 </script>
