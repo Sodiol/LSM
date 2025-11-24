@@ -5,7 +5,7 @@
     "start": "node back/server.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": "20.x"
   },
   "dependencies": {
     "clarifai-nodejs-grpc": "^11.7.4",
