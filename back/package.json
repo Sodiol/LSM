@@ -1,5 +1,12 @@
 {
   "type": "module",
+  "main": "back/server.js",
+  "scripts": {
+    "start": "node back/server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "clarifai-nodejs-grpc": "^11.7.4",
     "cors": "^2.8.5",
