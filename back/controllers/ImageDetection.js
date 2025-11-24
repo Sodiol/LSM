@@ -1,6 +1,10 @@
+// --- IMPORTS ---
 import { ClarifaiStub, grpc } from "clarifai-nodejs-grpc";
-import fetch from "node-fetch";
 
+// Ya NO necesitas fetch
+// import fetch from "node-fetch";
+
+// --- CONFIG ---
 const PAT = "9f21389fa2944ae59a142621d67bf588";
 const USER_ID = "clarifai";
 const APP_ID = "main";
@@ -11,7 +15,7 @@ const stub = ClarifaiStub.grpc();
 const metadata = new grpc.Metadata();
 metadata.set("authorization", "Key " + PAT);
 
-// Diccionario local para traducciones rápidas
+// --- DICCIONARIO LOCAL ---
 const diccionario = {
   dog: "perro",
   cat: "gato",
@@ -22,78 +26,47 @@ const diccionario = {
   chair: "silla",
   houseplant: "planta",
   flowerpot: "maceta"
-  // agrega más palabras comunes
 };
 
-// Función para traducir usando RapidAPI (Deep Translate)
-async function traducirTexto(texto, sourceLang = "en", targetLang = "es") {
-  // Primero revisa el diccionario
+// --- FUNCIÓN DE TRADUCCIÓN SOLO DICCIONARIO ---
+async function traducirTexto(texto) {
+  const lower = texto.toLowerCase();
 
-  if (diccionario[texto.toLowerCase()]) {
-    return diccionario[texto.toLowerCase()];
+  if (diccionario[lower]) {
+    return diccionario[lower];
   }
 
-  const url = "https://localhost:5000/translate";
-  
-  // Primero revisa el diccionario
-
-
-  try {
-    // CONVERTIR A LOWERCASE antes de enviar
-    const textoLower = texto.toLowerCase();
-    console.log(`🔍 Traduciendo: "${texto}" → enviando: "${textoLower}"`);
-
-    const response = await fetch("http://localhost:5000/translate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        q: textoLower,
-        source: sourceLang,
-        target: targetLang,
-        format: "text"
-      }),
-    });
-
-    const result = await response.json();
-    //console.log("Respuesta de traducción:", result);
-    //console.log(`🔍 Request enviado: q="${texto}", source="${sourceLang}", target="${targetLang}"`);
-    //console.log("📡 Respuesta completa:", JSON.stringify(result, null, 2));
-    //console.log("📝 translatedText:", result.translatedText);
-    return result.translatedText || texto;
-  } catch (error) {
-    console.error("Error al traducir:", error);
-    return texto; // fallback: regresa el texto original
-  }
+  // Si no está traducido, regresa el texto original
+  return texto;
 }
 
-
-// Controller imageDetection
+// --- CONTROLLER ---
 export const imageDetection = async (req, res) => {
   const { imageUrl } = req.body;
   if (!imageUrl) {
     return res.status(400).json({ error: "Falta URL de la imagen" });
   }
-console.log("Recibiendo imagen para detección:", imageUrl);
+
+  console.log("Recibiendo imagen:", imageUrl);
+
   stub.PostModelOutputs(
     {
       user_app_id: { user_id: USER_ID, app_id: APP_ID },
       model_id: MODEL_ID,
       version_id: MODEL_VERSION_ID,
       inputs: [{ data: { image: { url: imageUrl, allow_duplicate_url: true } } }],
-
     },
     metadata,
     async (err, response) => {
       if (err) return res.status(500).json({ error: err.message });
+
       if (response.status.code !== 10000)
         return res.status(500).json({ error: response.status.description });
 
       try {
         const regiones = response.outputs[0].data.regions || [];
-
         const resultados = [];
 
-        // Traduce **secencialmente** para no saturar la API
         for (const region of regiones) {
           const bbox = region.region_info.bounding_box;
           const nombreOriginal = region.data.concepts[0].name;
@@ -115,7 +88,7 @@ console.log("Recibiendo imagen para detección:", imageUrl);
 
         res.json({ resultados });
       } catch (e) {
-        res.status(500).json({ error: "Error al traducir: " + e.message });
+        res.status(500).json({ error: "Error al procesar: " + e.message });
       }
     }
   );
